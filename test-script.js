@@ -6,7 +6,7 @@ function coverImages() {
         const imgWidth = img.naturalWidth; // Lebar asli gambar
         const imgHeight = img.naturalHeight; // Tinggi asli gambar
 
-        // Menghindari gambar yang kecil (misalnya, kurang dari 50x50) atau yang mengandung 'logo'/'icon' dalam src
+        // Menghindari gambar yang kecil atau yang mengandung 'logo'/'icon' dalam src
         if (!img.dataset.covered && (imgWidth > 50 && imgHeight > 50) && !img.src.includes('logo') && !img.src.includes('icon')) {
             // Membuat elemen overlay
             const overlay = document.createElement('div');
@@ -22,23 +22,25 @@ function coverImages() {
             overlay.style.alignItems = 'center';
             overlay.style.fontSize = '20px';
             overlay.style.zIndex = '1000'; // Pastikan overlay di atas gambar
-            overlay.innerText = 'Content Sensitive';
+            overlay.innerText = 'Content Image';
 
             // Membuat tombol "See Image"
             const button = document.createElement('button');
             button.innerText = 'See Image';
             button.style.marginTop = '10px';
             button.onclick = function() {
-                alert('Fetch API...'); // Menampilkan alert saat tombol diklik
+                alert('This is a sensitive image.'); // Menampilkan alert saat tombol diklik
                 overlay.remove(); // Menghapus overlay
                 img.style.display = 'block'; // Menampilkan gambar
                 img.dataset.covered = 'true'; // Tandai bahwa gambar sudah dilihat
+                img.style.pointerEvents = 'auto'; // Izinkan interaksi setelah melihat gambar
             };
 
             overlay.appendChild(button); // Menambahkan tombol ke overlay
             img.style.position = 'relative'; // Pastikan gambar memiliki posisi relatif
             img.parentNode.insertBefore(overlay, img); // Menambahkan overlay di atas gambar
             img.style.display = 'none'; // Menyembunyikan gambar asli
+            img.style.pointerEvents = 'none'; // Cegah interaksi sebelum melihat gambar
 
             // Tandai gambar sebagai telah ditutupi
             img.dataset.covered = 'false'; // Tandai sebagai belum dilihat
@@ -62,4 +64,3 @@ function coverImages() {
             }, 100);
         });
     });
-
