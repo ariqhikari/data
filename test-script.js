@@ -1,80 +1,112 @@
-// Fungsi untuk menutupi gambar dengan overlay
 function coverImages() {
-    const images = document.getElementsByTagName('img'); // Mengambil semua elemen gambar
+  const images = document.getElementsByTagName("img");
 
-    for (let img of images) {
-        const imgWidth = img.naturalWidth; // Lebar asli gambar
-        const imgHeight = img.naturalHeight; // Tinggi asli gambar
+  for (let img of images) {
+    const imgWidth = img.naturalWidth;
+    const imgHeight = img.naturalHeight;
 
-        // Menghindari gambar yang kecil atau yang mengandung 'logo'/'icon' dalam src
-        if (!img.dataset.covered && (imgWidth > 50 && imgHeight > 50) && !img.src.includes('logo') && !img.src.includes('icon')) {
-            // Membuat elemen overlay
-            const overlay = document.createElement('div');
-            overlay.style.position = 'absolute'; // Gunakan posisi absolut
-            overlay.style.top = '0'; // Atur posisi atas
-            overlay.style.left = '0'; // Atur posisi kiri
-            overlay.style.width = '100%'; // Lebar overlay 100% dari gambar
-            overlay.style.height = '100%'; // Tinggi overlay 100% dari gambar
-            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Warna latar belakang transparan
-            overlay.style.color = 'white';
-            overlay.style.display = 'flex';
-            overlay.style.flexDirection = 'column'; // Tambahkan arah kolom untuk tombol dan loading
-            overlay.style.justifyContent = 'center';
-            overlay.style.alignItems = 'center';
-            overlay.style.fontSize = '20px';
-            overlay.style.zIndex = '1000'; // Pastikan overlay di atas gambar
-            overlay.innerText = 'Content Image';
+    if (
+      !img.dataset.covered &&
+      imgWidth > 50 &&
+      imgHeight > 50 &&
+      !img.src.includes("logo") &&
+      !img.src.includes("icon")
+    ) {
+      const overlay = document.createElement("div");
+      overlay.style.position = "absolute";
+      overlay.style.top = "0";
+      overlay.style.left = "0";
+      overlay.style.width = "100%";
+      overlay.style.height = "100%";
+      overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+      overlay.style.color = "white";
+      overlay.style.display = "flex";
+      overlay.style.flexDirection = "column";
+      overlay.style.justifyContent = "center";
+      overlay.style.alignItems = "center";
+      overlay.style.fontSize = "16px";
+      overlay.style.textAlign = "center";
+      overlay.style.gap = "10px";
+      overlay.style.zIndex = "1000";
 
-            // Membuat elemen loading
-            const loading = document.createElement('div');
-            loading.innerText = 'Loading...'; // Teks loading
-            loading.style.display = 'none'; // Sembunyikan loading di awal
-            overlay.appendChild(loading); // Tambahkan loading ke overlay
+      img.style.filter = "blur(10px)";
+      img.style.opacity = "0.7";
 
-            // Membuat tombol "See Image"
-            const button = document.createElement('button');
-            button.innerText = 'See Image';
-            button.style.marginTop = '10px';
-            button.onclick = function() {
-                loading.style.display = 'block'; // Tampilkan animasi loading
-                button.disabled = true; // Nonaktifkan tombol untuk mencegah klik ganda
+      const sensitiveText = document.createElement("div");
+      sensitiveText.innerText = "Image Content";
+      sensitiveText.style.fontSize = "18px";
+      sensitiveText.style.fontWeight = "bold";
+      overlay.appendChild(sensitiveText);
 
-                // Simulasi fetch API dengan delay 250 ms
-                setTimeout(() => {
-                    alert('Success Fetch (simulation).'); // Menampilkan alert saat tombol diklik
-                    overlay.remove(); // Menghapus overlay
-                    img.style.display = 'block'; // Menampilkan gambar
-                    img.dataset.covered = 'true'; // Tandai bahwa gambar sudah dilihat
-                    img.style.pointerEvents = 'auto'; // Izinkan interaksi setelah melihat gambar
-                }, 250); // Waktu loading 250 ms
-            };
+      const description = document.createElement("div");
+      description.innerText =
+        "This photo may contain sensitive or disturbing content.";
+      description.style.fontSize = "12px";
+      overlay.appendChild(description);
 
-            overlay.appendChild(button); // Menambahkan tombol ke overlay
-            img.style.position = 'relative'; // Pastikan gambar memiliki posisi relatif
-            img.parentNode.insertBefore(overlay, img); // Menambahkan overlay di atas gambar
-            img.style.display = 'none'; // Menyembunyikan gambar asli
-            img.style.pointerEvents = 'none'; // Cegah interaksi sebelum melihat gambar
+      const loading = document.createElement("div");
+      loading.innerText = "Loading...";
+      loading.style.display = "none";
+      overlay.appendChild(loading);
 
-            // Tandai gambar sebagai telah ditutupi
-            img.dataset.covered = 'false'; // Tandai sebagai belum dilihat
-        }
+      const button = document.createElement("button");
+      button.innerText = "See Image";
+      button.style.marginTop = "10px";
+      button.style.padding = "5px 15px";
+      button.style.backgroundColor = "transparent";
+      button.style.color = "white";
+      button.style.border = "1px solid white";
+      button.style.borderRadius = "5px";
+      button.style.cursor = "pointer";
+      button.onclick = function () {
+        loading.style.display = "block";
+        button.disabled = true;
+
+        setTimeout(() => {
+          alert("Success Fetch (simulation).");
+          overlay.remove();
+          img.style.filter = "none";
+          img.style.opacity = "1";
+          img.dataset.covered = "true";
+          img.style.pointerEvents = "auto";
+        }, 250);
+      };
+
+      overlay.appendChild(button);
+      img.style.position = "relative";
+      img.parentNode.insertBefore(overlay, img);
+      img.style.pointerEvents = "none";
+
+      img.dataset.covered = "false";
     }
+  }
 }
 
-// Menjalankan fungsi setelah halaman dimuat
-window.onload = function() {
-    coverImages(); // Panggil saat halaman dimuat
+let isCoverImagesRunning = false; // Flag untuk melacak status coverImages
 
-    // Mengatur event listener untuk berbagai interaksi
-    const events = ['scroll', 'click', 'keydown', 'mousemove'];
+function handleInteraction() {
+  if (isCoverImagesRunning) return; // Cegah pemanggilan jika sudah berjalan
 
-    events.forEach(event => {
-        window.addEventListener(event, () => {
-            // Debounce: Menghindari pemanggilan fungsi berulang kali
-            clearTimeout(window.interactionTimeout);
-            window.interactionTimeout = setTimeout(() => {
-                coverImages(); // Panggil fungsi lagi setelah interaksi
-            }, 100);
-        });
-    });
-};
+  isCoverImagesRunning = true; // Tandai fungsi sedang berjalan
+  coverImages();
+  isCoverImagesRunning = false; // Reset flag setelah selesai
+}
+
+coverImages();
+
+const events = [
+  "scroll",
+  "click",
+  "keydown",
+  "mousemove",
+  "touchstart",
+  "touchmove",
+  "touchend", // Tambahkan jika perlu
+];
+
+events.forEach((event) => {
+  window.addEventListener(event, () => {
+    clearTimeout(window.interactionTimeout);
+    window.interactionTimeout = setTimeout(handleInteraction, 100); // Panggil handleInteraction
+  });
+});
