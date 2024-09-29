@@ -28,7 +28,7 @@ function coverImages() {
         overlay.style.alignItems = 'center';
         overlay.style.fontSize = '20px';
         overlay.style.zIndex = '1000'; // Pastikan overlay di atas gambar
-        overlay.innerText = 'Content Sensitive';
+        overlay.innerText = 'Content Image';
 
         // Membuat tombol "See Image"
         const button = document.createElement('button');
@@ -36,6 +36,8 @@ function coverImages() {
         button.style.marginTop = '10px';
         button.onclick = function() {
             alert('This is a sensitive image.'); // Menampilkan alert saat tombol diklik
+            overlay.remove(); // Menghapus overlay
+            img.style.display = 'block'; // Menampilkan gambar
         };
 
         overlay.appendChild(button); // Menambahkan tombol ke overlay
@@ -45,6 +47,19 @@ function coverImages() {
     }
 }
 
-coverImages()
+// Menjalankan fungsi setelah halaman dimuat
+coverImages(); // Panggil saat halaman dimuat
 
+// Mengatur event listener untuk berbagai interaksi
+const events = ['scroll', 'click', 'keydown', 'mousemove'];
+
+events.forEach(event => {
+    window.addEventListener(event, () => {
+        // Debounce: Menghindari pemanggilan fungsi berulang kali
+        clearTimeout(window.interactionTimeout);
+        window.interactionTimeout = setTimeout(() => {
+            coverImages(); // Panggil fungsi lagi setelah interaksi
+        }, 100);
+    });
+});
 
