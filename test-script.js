@@ -3,8 +3,11 @@ function coverImages() {
     const images = document.getElementsByTagName('img'); // Mengambil semua elemen gambar
 
     for (let img of images) {
-        // Hanya menambahkan overlay jika gambar belum ditutupi
-        if (!img.dataset.covered) {
+        const imgWidth = img.naturalWidth; // Lebar asli gambar
+        const imgHeight = img.naturalHeight; // Tinggi asli gambar
+
+        // Menghindari gambar yang kecil (misalnya, kurang dari 50x50) atau yang mengandung 'logo'/'icon' dalam src
+        if (!img.dataset.covered && (imgWidth > 50 && imgHeight > 50) && !img.src.includes('logo') && !img.src.includes('icon')) {
             // Membuat elemen overlay
             const overlay = document.createElement('div');
             overlay.style.position = 'absolute'; // Gunakan posisi absolut
@@ -19,14 +22,14 @@ function coverImages() {
             overlay.style.alignItems = 'center';
             overlay.style.fontSize = '20px';
             overlay.style.zIndex = '1000'; // Pastikan overlay di atas gambar
-            overlay.innerText = 'Content Image';
+            overlay.innerText = 'Content Sensitive';
 
             // Membuat tombol "See Image"
             const button = document.createElement('button');
             button.innerText = 'See Image';
             button.style.marginTop = '10px';
             button.onclick = function() {
-                alert('This is a sensitive image.'); // Menampilkan alert saat tombol diklik
+                alert('Fetch API...'); // Menampilkan alert saat tombol diklik
                 overlay.remove(); // Menghapus overlay
                 img.style.display = 'block'; // Menampilkan gambar
                 img.dataset.covered = 'true'; // Tandai bahwa gambar sudah dilihat
@@ -44,6 +47,7 @@ function coverImages() {
 }
 
 // Menjalankan fungsi setelah halaman dimuat
+
     coverImages(); // Panggil saat halaman dimuat
 
     // Mengatur event listener untuk berbagai interaksi
@@ -58,3 +62,4 @@ function coverImages() {
             }, 100);
         });
     });
+
