@@ -18,22 +18,35 @@ function coverImages() {
             overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Warna latar belakang transparan
             overlay.style.color = 'white';
             overlay.style.display = 'flex';
+            overlay.style.flexDirection = 'column'; // Tambahkan arah kolom untuk tombol dan loading
             overlay.style.justifyContent = 'center';
             overlay.style.alignItems = 'center';
             overlay.style.fontSize = '20px';
             overlay.style.zIndex = '1000'; // Pastikan overlay di atas gambar
             overlay.innerText = 'Content Image';
 
+            // Membuat elemen loading
+            const loading = document.createElement('div');
+            loading.innerText = 'Loading...'; // Teks loading
+            loading.style.display = 'none'; // Sembunyikan loading di awal
+            overlay.appendChild(loading); // Tambahkan loading ke overlay
+
             // Membuat tombol "See Image"
             const button = document.createElement('button');
             button.innerText = 'See Image';
             button.style.marginTop = '10px';
             button.onclick = function() {
-                alert('This is a sensitive image.'); // Menampilkan alert saat tombol diklik
-                overlay.remove(); // Menghapus overlay
-                img.style.display = 'block'; // Menampilkan gambar
-                img.dataset.covered = 'true'; // Tandai bahwa gambar sudah dilihat
-                img.style.pointerEvents = 'auto'; // Izinkan interaksi setelah melihat gambar
+                loading.style.display = 'block'; // Tampilkan animasi loading
+                button.disabled = true; // Nonaktifkan tombol untuk mencegah klik ganda
+
+                // Simulasi fetch API dengan delay 250 ms
+                setTimeout(() => {
+                    alert('Success Fetch (simulation).'); // Menampilkan alert saat tombol diklik
+                    overlay.remove(); // Menghapus overlay
+                    img.style.display = 'block'; // Menampilkan gambar
+                    img.dataset.covered = 'true'; // Tandai bahwa gambar sudah dilihat
+                    img.style.pointerEvents = 'auto'; // Izinkan interaksi setelah melihat gambar
+                }, 250); // Waktu loading 250 ms
             };
 
             overlay.appendChild(button); // Menambahkan tombol ke overlay
@@ -49,7 +62,7 @@ function coverImages() {
 }
 
 // Menjalankan fungsi setelah halaman dimuat
-
+window.onload = function() {
     coverImages(); // Panggil saat halaman dimuat
 
     // Mengatur event listener untuk berbagai interaksi
@@ -64,3 +77,4 @@ function coverImages() {
             }, 100);
         });
     });
+};
