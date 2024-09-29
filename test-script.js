@@ -7,11 +7,11 @@ function coverImages() {
         if (!img.dataset.covered) {
             // Membuat elemen overlay
             const overlay = document.createElement('div');
-            overlay.style.position = 'absolute';
-            overlay.style.top = img.offsetTop + 'px';
-            overlay.style.left = img.offsetLeft + 'px';
-            overlay.style.width = img.offsetWidth + 'px';
-            overlay.style.height = img.offsetHeight + 'px';
+            overlay.style.position = 'absolute'; // Gunakan posisi absolut
+            overlay.style.top = '0'; // Atur posisi atas
+            overlay.style.left = '0'; // Atur posisi kiri
+            overlay.style.width = '100%'; // Lebar overlay 100% dari gambar
+            overlay.style.height = '100%'; // Tinggi overlay 100% dari gambar
             overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Warna latar belakang transparan
             overlay.style.color = 'white';
             overlay.style.display = 'flex';
@@ -44,7 +44,6 @@ function coverImages() {
 }
 
 // Menjalankan fungsi setelah halaman dimuat
-window.onload = function() {
     coverImages(); // Panggil saat halaman dimuat
 
     // Mengatur event listener untuk berbagai interaksi
@@ -59,4 +58,3 @@ window.onload = function() {
             }, 100);
         });
     });
-};
