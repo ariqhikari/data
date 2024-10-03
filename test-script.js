@@ -29,7 +29,7 @@ function coverImages() {
       overlay.style.gap = "10px";
       overlay.style.zIndex = "1000";
 
-      img.style.filter = "blur(24px)";
+      img.style.filter = "blur(64px)";
       img.style.opacity = "0.7";
 
       const sensitiveText = document.createElement("div");
