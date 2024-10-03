@@ -1,5 +1,14 @@
 function coverImages() {
+  const divs = document.getElementsByTagName("div");
   const images = document.getElementsByTagName("img");
+
+  for (let div of divs) {
+     const hasBackgroundImage = window.getComputedStyle(div).backgroundImage !== 'none';
+
+    if (hasBackgroundImage) {
+      div.style.filter = "blur(64px)";
+    }
+  }
 
   for (let img of images) {
     const imgWidth = img.naturalWidth;
